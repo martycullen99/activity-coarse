@@ -2,9 +2,12 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <thread>
 
 #include "Dictionary.cpp"
 #include "MyHashtable.cpp"
+
+
 
 //Tokenize a string into individual word, removing punctuation at the
 //end of words
@@ -45,7 +48,15 @@ std::vector<std::vector<std::string>> tokenizeLyrics(const std::vector<std::stri
   return ret;
 }
 
+void pushFile(std::vector<std::string> words, Dictionary<std::string, int>& dict)
+{
+  dict.set("thing", 1);
+}
 
+void x(std::vector<std::string> words, Dictionary& dict)
+{
+  
+}
 
 int main(int argc, char **argv)
 {
@@ -76,10 +87,32 @@ int main(int argc, char **argv)
 
 
   // write code here
+  std::cout << wordmap.front().front() << "\n";
+  std::cout << wordmap.front()[1] << "\n";
+  std::cout << wordmap[1][0] << "\n";
+  
+  std::vector<std::thread> mythreads;
+  
+  
+  for (auto & f : wordmap)
+    {
+      //std::thread mythread(pushFile, f, dict);
+      std::thread mythread(x, f, dict);
+      mythreads.push_back(std::move(mythread));
+    }
 
-
-
-
+  for(auto & t : mythreads)
+    {
+      if (t.joinable())
+	{
+	  t.join();
+	}
+      else
+	{
+	  std::cout << "t is not joinable\n";
+	}
+    }
+  
 
 
 
